@@ -1,12 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 import static java.util.Collections.max;
 
-public class Bakery implements Lock {
+public class Bakery {
     List<Boolean> flag = new ArrayList<>();
     List<Integer> label = new ArrayList<>();
 
@@ -29,23 +26,5 @@ public class Bakery implements Lock {
 
     public void unlock(int i) {
         flag.set(i, false);
-    }
-
-    public void lock() { }
-
-    public void lockInterruptibly() throws InterruptedException { }
-
-    public boolean tryLock() {
-        return false;
-    }
-
-    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
-        return false;
-    }
-
-    public void unlock() { }
-
-    public Condition newCondition() {
-        return null;
     }
 }

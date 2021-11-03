@@ -14,8 +14,12 @@ public class Pot2 {
         lock.lock(i);
         try {
             if (servings == 0)
-                servings += capacity;
+                servings = capacity;
             servings--;
+            if (servings < 0)
+                throw new Exception("Bad");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             lock.unlock(i);
         }
