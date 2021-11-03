@@ -10,7 +10,11 @@ public class Eater implements Runnable {
 
     @Override
     public void run() {
-        pot.takeOne();
-        System.out.println("Eater " + this.number + " has eaten.");
+        try {
+            pot.takeOne();
+            System.out.println("Eater " + this.number + " has eaten.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
