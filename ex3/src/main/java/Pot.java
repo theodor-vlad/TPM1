@@ -18,7 +18,7 @@ public class Pot {
     public void takeOne() {
         lock.lock();
         try {
-            while (servings == 0) {
+            if (servings == 0) {
                 empty.signal();
                 can_eat.await();
             }
