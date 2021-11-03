@@ -15,7 +15,7 @@ public class Pot {
         this.servings = capacity;
     }
 
-    public void takeOne() throws Exception {
+    public void takeOne() {
         lock.lock();
         try {
             while (servings == 0) {
@@ -25,22 +25,6 @@ public class Pot {
             servings--;
             if (servings < 0)
                 throw new Exception("Can't eat, pot is empty.");
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void takeOne(int eater, int times) {
-        lock.lock();
-        try {
-            while (servings == 0) {
-                empty.signal();
-                can_eat.await();
-            }
-            servings--;
-            if (servings < 0)
-                throw new Exception("Can't eat, pot is empty.");
-            System.out.println("Eater " + eater + " has eaten " + times + " time(s).");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
