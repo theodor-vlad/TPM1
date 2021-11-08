@@ -9,13 +9,15 @@ public class Pot {
     ReentrantLock lock = new ReentrantLock();
     Condition empty = lock.newCondition();
     Condition can_eat = lock.newCondition();
+    volatile boolean[] has_eaten;
 
-    public Pot(int capacity) {
+    public Pot(int capacity, int eaters) {
         this.capacity = capacity;
         this.servings = capacity;
+        has_eaten = new boolean[eaters];
     }
 
-    public void takeOne() {
+    public void takeOne(int index) {
         lock.lock();
         try {
             if (servings == 0) {
@@ -23,6 +25,7 @@ public class Pot {
                 can_eat.await();
             }
             servings--;
+            has_eaten[index] = true;
             if (servings < 0)
                 throw new Exception("Can't eat, pot is empty.");
         } catch (Exception e) {
@@ -36,12 +39,8 @@ public class Pot {
         lock.lock();
         try {
             boolean result = true;
-            if (servings > 0) {
-                result = empty.await(5, TimeUnit.SECONDS);
-                if (!result) {
-                    System.out.println("All eaters have dined.");
-                }
-            }
+            if (servings > 0)
+                result = empty.await(3, TimeUnit.SECONDS);
 
             if (result) {
                 servings += capacity;
@@ -52,5 +51,12 @@ public class Pot {
         } finally {
             lock.unlock();
         }
+    }
+
+    public boolean allHaveEaten() {
+        for (var b : has_eaten)
+            if (!b)
+                return false;
+        return true;
     }
 }

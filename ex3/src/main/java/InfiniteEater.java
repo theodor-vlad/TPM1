@@ -13,7 +13,7 @@ public class InfiniteEater implements Runnable {
     public void run() {
         while (true) {
             try {
-                pot.takeOne();
+                pot.takeOne(number);
                 Thread.sleep(500); // wait for others to eat
                 System.out.println("Eater " + number + " has eaten " + (++times_eaten) + " times.");
             } catch (InterruptedException e) {
